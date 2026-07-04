@@ -10,6 +10,7 @@ TELEGRAM_BOT_TOKEN = os.environ["TELEGRAM_BOT_TOKEN"]
 GRUPO_DESTINO_ID = os.environ["GRUPO_DESTINO_ID"]
 GROQ_API_KEY = os.environ["GROQ_API_KEY"]
 AFILIADO_ML = os.environ.get("AFILIADO_ML_ID", "")
+AFILIADO_ML_TOOL = os.environ.get("AFILIADO_ML_TOOL", "")
 AFILIADO_AMAZON = os.environ.get("AFILIADO_AMAZON_TAG", "")
 POST_INTERVAL_HORAS = float(os.environ.get("POST_INTERVAL_HOURS", "3"))
 CHECK_INTERVAL_HORAS = float(os.environ.get("CHECK_INTERVAL_HOURS", "6"))
@@ -76,7 +77,9 @@ def extrair_dados_pagina(url):
 def adicionar_tag_afiliado(url):
     sep = "&" if "?" in url else "?"
     if "mercadolivre" in url or "mercadolibre" in url:
-        return f"{url}{sep}matt_word={AFILIADO_ML}" if AFILIADO_ML else url
+        if AFILIADO_ML and AFILIADO_ML_TOOL:
+            return f"{url}{sep}matt_word={AFILIADO_ML}&matt_tool={AFILIADO_ML_TOOL}"
+        return url
     if "amazon.com" in url or "amzn." in url:
         return f"{url}{sep}tag={AFILIADO_AMAZON}" if AFILIADO_AMAZON else url
     return url
