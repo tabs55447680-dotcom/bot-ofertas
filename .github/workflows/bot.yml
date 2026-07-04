@@ -1,0 +1,43 @@
+name: Bot de Ofertas
+
+on:
+  schedule:
+    - cron: '*/15 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  rodar:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixar o código
+        uses: actions/checkout@v4
+
+      - name: Preparar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Instalar dependências
+        run: pip install -r requirements.txt
+
+      - name: Rodar o bot
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          GRUPO_DESTINO_ID: ${{ secrets.GRUPO_DESTINO_ID }}
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          AFILIADO_ML_ID: ${{ secrets.AFILIADO_ML_ID }}
+          AFILIADO_AMAZON_TAG: ${{ secrets.AFILIADO_AMAZON_TAG }}
+          POST_INTERVAL_HOURS: '3'
+          CHECK_INTERVAL_HOURS: '6'
+        run: python bot.py
+
+      - name: Salvar o estado
+        run: |
+          git config user.name "bot-ofertas"
+          git config user.email "bot@users.noreply.github.com"
+          git add fila.json watchlist.json estado.json
+          git diff --staged --quiet || git commit -m "atualiza estado"
+          git push
