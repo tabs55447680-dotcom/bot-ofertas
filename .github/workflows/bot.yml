@@ -29,6 +29,7 @@ jobs:
           GRUPO_DESTINO_ID: ${{ secrets.GRUPO_DESTINO_ID }}
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
           AFILIADO_ML_ID: ${{ secrets.AFILIADO_ML_ID }}
+          AFILIADO_ML_TOOL: ${{ secrets.AFILIADO_ML_TOOL }}
           AFILIADO_AMAZON_TAG: ${{ secrets.AFILIADO_AMAZON_TAG }}
           POST_INTERVAL_HOURS: '3'
           CHECK_INTERVAL_HOURS: '6'
